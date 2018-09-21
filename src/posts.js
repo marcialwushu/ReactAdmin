@@ -3,7 +3,7 @@ import { Filter, List, Edit, Create, Datagrid, ReferenceField, TextField } from 
 import { DisabledInput, LongTextInput, ReferenceInput, SelectInput, SimpleForm, TextInput } from 'react-admin';
 
 export const PostList = (props) => (
-    <List {...props}>
+    <List {...props} filters={<PostFilter />}>
         <Datagrid>
             <TextField source="id" />
             <ReferenceField label="User" source="userId" reference="users">
@@ -55,8 +55,3 @@ const PostFilter = (props) => (
     </Filter>
 );
 
-export const PostListing = (props) => (
-    <List {...props} filters={<PostFilter />}>
-        ...
-    </List>
-);
