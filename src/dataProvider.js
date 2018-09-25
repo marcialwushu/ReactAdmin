@@ -33,5 +33,33 @@ const convertDataProviderRequestToHTTP = (type, resource, params) => {
         };
         return { url: `${API_URL}/${resource}?${stringify(query)}` };
     }
+    case GET_MANY_REFERENCE: {
+        const { page, perPage } = params.pagination;
+        const { field, order } = params.sort;
+        const query = {
+            sort: JSON.stringify([field, order]),
+            range: JSON.stringify([(page - 1) * perPage, (page * perPage) - 1]),
+            filter: JSON.stringify({ ...params.filter, [params.target]: params.id })
+        };
+        return { url: `${API_URL}/${resource}?${stringify(query)}` };
     }
-}
+    case UPDATE:
+        return {
+            url: `${API_URL}/${resource}/${params.id}`,
+            options: { method: 'PUT', body: JSON.stringify(params.data) },
+        };
+    case CREATE:
+        return {
+            url: `${API_URL}/${resource}`,
+            options: { method: 'POST', body: JSON.stringify(params.data) },
+        };
+    case DELETE:
+        return {
+            url: `${API_URL}/${resource}/${params.id}`,
+            options: { method: 'DELETE' },
+        };
+    default:
+        throw new Error(`Unsupported fetch action type ${type}`);
+    }
+};
+
